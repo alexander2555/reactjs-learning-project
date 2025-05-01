@@ -5,11 +5,7 @@ export const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <img
-          src={Logo}
-          className="App-logo"
-          alt="logo"
-        />
+        <img src={Logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
@@ -21,7 +17,13 @@ export const App = () => {
         >
           Learn React
         </a>
-        <span>{new Date().getFullYear()}</span>
+        <span>
+          {
+            /** имеются признаки императивного подхода (создаётся объект и вызывается метод) */
+            new Date().getFullYear()
+            /* / */
+          }
+        </span>
       </header>
     </div>
   )
