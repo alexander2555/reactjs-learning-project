@@ -1,29 +1,11 @@
-import Logo from './assets/react.svg'
-import './App.css'
+import styles from './App.module.css'
+import { MyComponent } from './MyComponent'
 
 export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={Logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <span>
-          {
-            /** имеются признаки императивного подхода (создаётся объект и вызывается метод) */
-            new Date().getFullYear()
-            /* / */
-          }
-        </span>
+    <div className={styles.app}>
+      <header className={styles.appHeader}>
+        <MyComponent />
       </header>
     </div>
   )
