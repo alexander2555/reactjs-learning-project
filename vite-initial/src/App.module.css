@@ -4,12 +4,46 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: 1rem;
   color: white;
-  background-color: #282c34;
   text-align: center;
 }
 
-.appHeader {
-  background-color: #282c34;
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 10rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: black;
+}
+
+.btn {
+  aspect-ratio: 1;
+  min-width: 2rem;
+  margin: 4px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 25%;
+  background-color: white;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+.input {
+  width: 10rem;
+  height: 2rem;
+  padding: 0 10px;
+  border-width: 0;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
 }

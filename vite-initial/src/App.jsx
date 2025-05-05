@@ -29,66 +29,79 @@ export const App = () => {
 
   return (
     <div className={styles.app}>
-      <input type='text' value={String(inputState.inputValue)} readOnly />
+      <input
+        type='text'
+        value={String(inputState.inputValue)}
+        className={styles.input}
+        style={{ color: !inputState.operation ? 'green' : 'black' }}
+        readOnly
+      />
       {/* Кнопки для цифр 0-9 */}
-      {btnValues.map(btnValue => (
+      <div className={styles.row}>
+        {btnValues.map(btnValue => (
+          <button
+            key={btnValue}
+            value={btnValue}
+            className={styles.btn}
+            onClick={() => {
+              setInputState({
+                ...inputState,
+                inputValue: inputState.inputValue
+                  ? inputState.inputValue * 10 + btnValue
+                  : btnValue,
+              })
+            }}
+          >
+            {btnValue}
+          </button>
+        ))}
+        {/* Кнопки для операций */}
+        {/* Сложение */}
         <button
-          key={btnValue}
-          value={btnValue}
+          className={styles.btn}
           onClick={() => {
+            calcOperation(add, inputState)
+          }}
+        >
+          +
+        </button>
+        {/* Вычитание */}
+        <button
+          className={styles.btn}
+          onClick={() => {
+            calcOperation(sub, inputState)
+          }}
+        >
+          -
+        </button>
+        {/* Результат */}
+        <button
+          className={styles.btn}
+          disabled={!inputState.operation}
+          onClick={() => {
+            const result = inputState.operation
+              ? inputState.operation(inputState.stackValue, inputState.inputValue)
+              : inputState.inputValue
             setInputState({
-              ...inputState,
-              inputValue: inputState.inputValue
-                ? inputState.inputValue * 10 + btnValue
-                : btnValue,
+              // ...inputState,
+              inputValue: result,
+              stackValue: result,
+              operation: null,
             })
           }}
         >
-          {btnValue}
+          =
         </button>
-      ))}
-      {/* Кнопки для операций */}
-      {/* Сброс */}
-      <button
-        onClick={() => {
-          setInputState({ ...initialState })
-        }}
-      >
-        C
-      </button>
-      {/* Сложение */}
-      <button
-        onClick={() => {
-          calcOperation(add, inputState)
-        }}
-      >
-        +
-      </button>
-      {/* Вычитание */}
-      <button
-        onClick={() => {
-          calcOperation(sub, inputState)
-        }}
-      >
-        -
-      </button>
-      {/* Результат */}
-      <button
-        disabled={!inputState.operation}
-        onClick={() => {
-          const result = inputState.operation
-            ? inputState.operation(inputState.stackValue, inputState.inputValue)
-            : inputState.inputValue
-          setInputState({
-            // ...inputState,
-            inputValue: result,
-            stackValue: result,
-            operation: null,
-          })
-        }}
-      >
-        =
-      </button>
+        {/* Сброс */}
+        <button
+          className={styles.btn}
+          onClick={() => {
+            setInputState({ ...initialState })
+          }}
+        >
+          C
+        </button>
+      </div>
     </div>
   )
 }
