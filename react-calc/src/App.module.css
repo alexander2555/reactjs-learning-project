@@ -11,11 +11,11 @@
 
 .row {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   width: 10rem;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 1rem;
   background-color: black;
 }
@@ -23,8 +23,8 @@
 .btn {
   aspect-ratio: 1;
   min-width: 2rem;
-  margin: 4px;
-  padding: 0 10px;
+  margin: 0.5rem;
+  padding: 0;
   border: 1px solid #ccc;
   border-radius: 25%;
   background-color: white;
@@ -33,6 +33,18 @@
   text-decoration: none;
   display: block;
   cursor: pointer;
+  transition:
+    box-shadow 0.3s,
+    color 0.3s;
+}
+.btn:hover {
+  box-shadow: 0 0 0.5rem 0.5rem rgba(255, 255, 255, 0.5);
+}
+.btn[disabled] {
+  background-color: #ccc;
+  color: #666;
+  box-shadow: none;
+  pointer-events: none;
 }
 
 .input {
