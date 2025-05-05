@@ -17,6 +17,16 @@ export const App = () => {
     btnValues.push(i)
   }
 
+  const calcOperation = (prevOperation, state) => {
+    const a = state.stackValue
+    const b = state.inputValue
+    setInputState({
+      inputValue: 0,
+      stackValue: state.operation ? state.operation(a, b) : b,
+      operation: prevOperation,
+    })
+  }
+
   return (
     <div className={styles.app}>
       <input type='text' value={String(inputState.inputValue)} readOnly />
@@ -26,7 +36,6 @@ export const App = () => {
           key={btnValue}
           value={btnValue}
           onClick={() => {
-            console.log('inputState', inputState)
             setInputState({
               ...inputState,
               inputValue: inputState.inputValue
@@ -50,13 +59,7 @@ export const App = () => {
       {/* Сложение */}
       <button
         onClick={() => {
-          const a = inputState.stackValue
-          const b = inputState.inputValue
-          setInputState({
-            inputValue: 0,
-            stackValue: inputState.operation ? inputState.operation(a, b) : b,
-            operation: add,
-          })
+          calcOperation(add, inputState)
         }}
       >
         +
@@ -64,13 +67,7 @@ export const App = () => {
       {/* Вычитание */}
       <button
         onClick={() => {
-          const a = inputState.stackValue
-          const b = inputState.inputValue
-          setInputState({
-            inputValue: 0,
-            stackValue: inputState.operation ? inputState.operation(a, b) : b,
-            operation: sub,
-          })
+          calcOperation(sub, inputState)
         }}
       >
         -
