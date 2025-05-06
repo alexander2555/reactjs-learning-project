@@ -2,9 +2,14 @@ import { useState } from 'react'
 import styles from './App.module.css'
 
 export const App = () => {
-  const [valueState, setValueState] = useState('')
-  const [listState, setListState] = useState([])
-  const [errorState, setErrorState] = useState('')
+  const [value, setValue] = useState('')
+  const [list, setList] = useState([])
+  const [error, setError] = useState('')
+
+  const onInputButtonClick = () => {
+    const promptValue = prompt('Введите значение')
+    console.log(promptValue)
+  }
 
   return (
     <div className={styles.app}>
@@ -17,7 +22,9 @@ export const App = () => {
         Введенное значение должно содержать минимум 3 символа
       </div>
       <div className={styles['buttons-container']}>
-        <button className={styles.button}>Ввести новое</button>
+        <button className={styles.button} onClick={onInputButtonClick}>
+          Ввести новое
+        </button>
         <button className={styles.button} disabled>
           Добавить в список
         </button>
