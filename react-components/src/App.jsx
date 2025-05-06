@@ -8,7 +8,8 @@ export const App = () => {
 
   const onInputButtonClick = () => {
     const promptValue = prompt('Введите значение')
-    console.log(promptValue)
+    setValue(promptValue)
+    // console.log(promptValue)
   }
 
   return (
@@ -16,7 +17,7 @@ export const App = () => {
       <h1 className={styles['page-heading']}>Ввод значения</h1>
       <p className={styles['no-margin-text']}>
         Текущее значение <code>value</code>: "
-        <output className={styles['current-value']}></output>"
+        <output className={styles['current-value']}>{value}</output>"
       </p>
       <div className={styles.error}>
         Введенное значение должно содержать минимум 3 символа
