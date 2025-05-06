@@ -1,7 +1,11 @@
-import Logo from './assets/react.svg'
+import { useState } from 'react'
 import styles from './App.module.css'
 
 export const App = () => {
+  const [valueState, setValueState] = useState('')
+  const [listState, setListState] = useState([])
+  const [errorState, setErrorState] = useState('')
+
   return (
     <div className={styles.app}>
       <h1 className={styles['page-heading']}>Ввод значения</h1>
