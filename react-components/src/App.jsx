@@ -5,11 +5,19 @@ export const App = () => {
   const [value, setValue] = useState('')
   const [list, setList] = useState([])
   const [error, setError] = useState('')
+  const [isValueVaild, setIsValueVaild] = useState(false)
 
   const onInputButtonClick = () => {
     const promptValue = prompt('Введите значение')
-    setValue(promptValue)
-    // console.log(promptValue)
+    if (promptValue && promptValue.length >= 3) {
+      setValue(promptValue)
+      setError('')
+      setIsValueVaild(true)
+    } else {
+      setValue('')
+      setError('Введенное значение должно содержать минимум 3 символа')
+      setIsValueVaild(false)
+    }
   }
 
   return (
@@ -19,14 +27,14 @@ export const App = () => {
         Текущее значение <code>value</code>: "
         <output className={styles['current-value']}>{value}</output>"
       </p>
-      <div className={styles.error}>
-        Введенное значение должно содержать минимум 3 символа
-      </div>
+
+      {error !== '' && <div className={styles.error}>{error}</div>}
+
       <div className={styles['buttons-container']}>
         <button className={styles.button} onClick={onInputButtonClick}>
           Ввести новое
         </button>
-        <button className={styles.button} disabled>
+        <button className={styles.button} disabled={!isValueVaild}>
           Добавить в список
         </button>
       </div>
