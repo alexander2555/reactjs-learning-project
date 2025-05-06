@@ -6,7 +6,7 @@ export const App = () => {
   const [list, setList] = useState([])
   const [error, setError] = useState('')
   const [isValueVaild, setIsValueVaild] = useState(false)
-
+  /* Обработчики нажатий */
   const onInputButtonClick = () => {
     const promptValue = prompt('Введите значение')
     if (promptValue && promptValue.length >= 3) {
@@ -18,6 +18,12 @@ export const App = () => {
       setError('Введенное значение должно содержать минимум 3 символа')
       setIsValueVaild(false)
     }
+  }
+  const onAddButtonClick = () => {
+    // const updatedList = [...list, { id: Date.now(), value }]
+    setList((list) => [...list, { id: Date.now(), value }])
+    setValue('')
+    setError('')
   }
 
   return (
@@ -34,7 +40,11 @@ export const App = () => {
         <button className={styles.button} onClick={onInputButtonClick}>
           Ввести новое
         </button>
-        <button className={styles.button} disabled={!isValueVaild}>
+        <button
+          className={styles.button}
+          onClick={onAddButtonClick}
+          disabled={!isValueVaild}
+        >
           Добавить в список
         </button>
       </div>
