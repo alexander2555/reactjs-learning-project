@@ -55,7 +55,7 @@ export const App = () => {
           <ul className={styles.list}>
             {list.map((item) => (
               <li className={styles['list-item']} key={item.id}>
-                {item.value}
+                {`${item.value} (${new Date(item.id).toLocaleString()})`}
               </li>
             ))}
           </ul>
