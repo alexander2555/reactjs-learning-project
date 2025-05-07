@@ -44,11 +44,11 @@ export const App = () => {
             ))}
           </ul>
           <div className={styles['buttons-container']}>
-            <button className={styles.button}>Назад</button>
-            <button className={styles.button}>
-              Далее
-              {/* "Начать сначала", можно сделать этой же кнопкой, просто подменять обработчик и текст в зависимости от условия */}
-              {/* Или заменять всю кнопку в зависимости от условия */}
+            <button className={styles.button} onClick={onBackward} disabled={isFirstStep}>
+              Назад
+            </button>
+            <button className={styles.button} onClick={isLastStep ? onStart : onForward}>
+              {isLastStep ? 'Начать сначала' : 'Далее'}
             </button>
           </div>
         </div>
