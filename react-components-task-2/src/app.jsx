@@ -38,7 +38,16 @@ export const App = () => {
                 key={step.id}
                 className={`${styles['steps-item']}${i === activeIndex ? ' ' + styles.active : ''}${i < activeIndex ? ' ' + styles.done : ''}`}
               >
-                <button className={styles['steps-item-button']}>{i + 1}</button>
+                <button
+                  className={styles['steps-item-button']}
+                  onClick={() => {
+                    if (i === activeIndex) return
+                    console.log(i)
+                    setActiveIndex(i)
+                  }}
+                >
+                  {i + 1}
+                </button>
                 Шаг&nbsp;{i + 1}
               </li>
             ))}
