@@ -1,8 +1,8 @@
 import { InfoLayout } from "./InfoLayout"
 
-export const Info = gameState => {
+export const Info = currentPlayer => {
 
   return (
-    <InfoLayout {...gameState} />
+    <InfoLayout {...currentPlayer} />
   )
 }

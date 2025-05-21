@@ -1,8 +1,8 @@
 import { FieldLayout } from "./FieldLayout"
 
-export const Field = gameState => {
+export const Field = ({ gameState, setGameState }) => {
 
   return (
-    <FieldLayout {...gameState} />
+    <FieldLayout {...gameState} setGameState={setGameState} />
   )
 }
