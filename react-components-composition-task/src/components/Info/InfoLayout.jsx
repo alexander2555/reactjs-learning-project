@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import styles from './Info.module.css'
 
 export const InfoLayout = ({ currentPlayer, winner, isDraw }) => {
@@ -20,4 +21,10 @@ export const InfoLayout = ({ currentPlayer, winner, isDraw }) => {
       )}
     </div>
   )
+}
+
+InfoLayout.propTypes = {
+  isDraw: PropTypes.bool,
+  winner: PropTypes.string,
+  currentPlayer: PropTypes.string.isRequired,
 }

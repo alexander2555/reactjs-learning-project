@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import styles from './App.module.css'
 
 import { Info } from './Info/Info'
@@ -13,4 +14,10 @@ export const AppLayout = ({ gameState, setGameState, restartGame }) => {
       </button>
     </div>
   )
+}
+
+AppLayout.propTypes = {
+  gameState: PropTypes.object,
+  setGameState: PropTypes.func,
+  restartGame: PropTypes.func,
 }
