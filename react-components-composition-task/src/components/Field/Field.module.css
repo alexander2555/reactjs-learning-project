@@ -17,10 +17,18 @@
   font-family: inherit;
   font-size: calc(var(--field-size) / 3 - 2rem);
 
+  transition: box-shadow 0.3s;
   cursor: pointer;
 }
 .cell:disabled {
   background-color: white;
 
   cursor: not-allowed;
+}
+.cell:hover {
+  box-shadow: 0 0 4rem 0.5rem var(--shadow-color);
+  z-index: 1;
+}
+.cell:hover:disabled {
+  box-shadow: none;
 }
