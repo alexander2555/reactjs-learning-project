@@ -14,6 +14,8 @@ export const FieldLayout = ({ field, currentPlayer, setGameState }) => {
       {field.map((row, i) =>
         row.map((cell, j) => (
           <button
+            style={{ color: field[i][j] === 'X' ? 'red' : 'blue' }}
+            className={styles.cell}
             onClick={() => cellClick(i, j)}
             key={i * 10 + j}
             disabled={field[i][j].length}
