@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import styles from './Field.module.css'
 
 export const FieldLayout = ({ currentPlayer, isGameEnded, field, onCellClick }) => {
@@ -21,4 +22,11 @@ export const FieldLayout = ({ currentPlayer, isGameEnded, field, onCellClick }) 
       )}
     </div>
   )
+}
+
+FieldLayout.propTypes = {
+  isGameEnded: PropTypes.bool,
+  field: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  currentPlayer: PropTypes.string.isRequired,
+  onCellClick: PropTypes.func.isRequired,
 }

@@ -1,3 +1,4 @@
+import PropTypes, { bool } from 'prop-types'
 import { FieldLayout } from './FieldLayout'
 
 const isFieldFull = field => field.every(r => r.every(c => c))
@@ -44,4 +45,12 @@ export const Field = ({ isDraw, winner, field, currentPlayer, setGameState }) =>
       onCellClick={cellClick}
     />
   )
+}
+
+Field.propTypes = {
+  isDraw: PropTypes.bool,
+  winner: PropTypes.string,
+  field: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  currentPlayer: PropTypes.string.isRequired,
+  setGameState: PropTypes.func.isRequired,
 }
