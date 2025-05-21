@@ -1,8 +1,5 @@
-import { InfoLayout } from "./InfoLayout"
+import { InfoLayout } from './InfoLayout'
 
-export const Info = currentPlayer => {
-
-  return (
-    <InfoLayout {...currentPlayer} />
-  )
+export const Info = infoState => {
+  return <InfoLayout {...infoState} />
 }
