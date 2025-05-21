@@ -1,7 +1,12 @@
+import styles from './Info.module.css'
+
 export const InfoLayout = ({ currentPlayer }) => {
   return (
-    <span>
-      {`Ход игрока: ${currentPlayer}`}
-    </span>
+    <div className={styles.info}>
+      Ход игрока:&nbsp;
+      <strong style={{ color: currentPlayer === 'X' ? 'red' : 'blue' }}>
+        {currentPlayer}
+      </strong>
+    </div>
   )
 }
