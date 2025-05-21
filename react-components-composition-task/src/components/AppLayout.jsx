@@ -6,8 +6,8 @@ import { Field } from './Field/Field'
 export const AppLayout = ({ gameState, setGameState }) => {
   return (
     <div className={styles.app}>
-      <Info {...gameState} />
-      <Field {...gameState} />
+      <Info currentPlayer={gameState.currentPlayer} />
+      <Field gameState={gameState} setGameState={setGameState} />
     </div>
   )
 }

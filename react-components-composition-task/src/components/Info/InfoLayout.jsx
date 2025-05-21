@@ -1,7 +1,7 @@
-export const InfoLayout = gameState => {
+export const InfoLayout = ({ currentPlayer }) => {
   return (
     <span>
-      {gameState.info}
+      {`Ход игрока: ${currentPlayer}`}
     </span>
   )
 }
