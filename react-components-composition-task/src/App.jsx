@@ -9,7 +9,6 @@ export const App = () => {
     isDraw: false,
     winner: null,
     currentPlayer: firstPlayer(),
-    info: 'initGame',
     field: [
       ['', '', ''],
       ['', '', ''],
@@ -18,5 +17,15 @@ export const App = () => {
   }
   const [gameState, setGameState] = useState(initGameState)
 
-  return <AppLayout gameState={gameState} setGameState={setGameState} />
+  const restartGame = () => {
+    setGameState({ ...initGameState })
+  }
+
+  return (
+    <AppLayout
+      gameState={gameState}
+      setGameState={setGameState}
+      restartGame={restartGame}
+    />
+  )
 }
