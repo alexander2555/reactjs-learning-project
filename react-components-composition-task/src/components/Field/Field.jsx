@@ -37,6 +37,11 @@ export const Field = ({ isDraw, winner, field, currentPlayer, setGameState }) =>
   }
 
   return (
-    <FieldLayout isGameEnded={isDraw || winner} field={field} onCellClick={cellClick} />
+    <FieldLayout
+      currentPlayer={currentPlayer}
+      isGameEnded={isDraw || winner}
+      field={field}
+      onCellClick={cellClick}
+    />
   )
 }
