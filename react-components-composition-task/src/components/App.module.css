@@ -1,0 +1,15 @@
+:root {
+  --field-size: calc(max(100vh, 100vw) / 3)
+}
+
+.app {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(28px);
+  color: white;
+}
