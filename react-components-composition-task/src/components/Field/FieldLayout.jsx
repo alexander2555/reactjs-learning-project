@@ -1,14 +1,6 @@
 import styles from './Field.module.css'
 
-export const FieldLayout = ({ field, currentPlayer, setGameState }) => {
-  const cellClick = (i, j) => {
-    field[i][j] = currentPlayer
-    setGameState({
-      currentPlayer: currentPlayer === 'X' ? 'O' : 'X',
-      field,
-    })
-  }
-
+export const FieldLayout = ({ isGameEnded, field, onCellClick }) => {
   return (
     <div className={styles.field}>
       {field.map((row, i) =>
@@ -16,9 +8,9 @@ export const FieldLayout = ({ field, currentPlayer, setGameState }) => {
           <button
             style={{ color: field[i][j] === 'X' ? 'red' : 'blue' }}
             className={styles.cell}
-            onClick={() => cellClick(i, j)}
+            onClick={() => onCellClick(i, j)}
             key={i * 10 + j}
-            disabled={field[i][j].length}
+            disabled={field[i][j] || isGameEnded}
           >
             {cell}
           </button>
