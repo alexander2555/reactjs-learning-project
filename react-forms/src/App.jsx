@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useStore } from './useStore'
 import styles from './App.module.css'
 
 const initialState = {
@@ -8,51 +8,42 @@ const initialState = {
 }
 
 export const App = () => {
-  const [formState, setFormState] = useState(initialState)
+  const { getState, updateState } = useStore(initialState)
+
+  const { email, pass, passRepeat } = getState()
+
+  const onChangeField = ({ target }) => updateState({ [target.name]: target.value })
 
   const onFormSubmit = e => {
     e.preventDefault()
-    console.log('Send data:', formState)
+    console.log('Send data:', getState())
   }
-
-  const onChangeEmail = ({ target }) =>
-    setFormState({
-      ...formState,
-      email: target.value,
-    })
-  const onChangePass = ({ target }) =>
-    setFormState({
-      ...formState,
-      pass: target.value,
-    })
-  const onChangePassRep = ({ target }) =>
-    setFormState({
-      ...formState,
-      passRepeat: target.value,
-    })
 
   return (
     <div className={styles.app}>
       <form onSubmit={onFormSubmit}>
         <input
+          name='email'
           type='email'
-          value={formState.email}
-          onChange={onChangeEmail}
+          value={email}
+          onChange={onChangeField}
           placeholder='Email'
         />
         <input
+          name='pass'
           type='password'
-          value={formState.pass}
-          onChange={onChangePass}
+          value={pass}
+          onChange={onChangeField}
           placeholder='Пароль'
         />
         <input
+          name='passRepeat'
           type='password'
-          value={formState.passRepeat}
-          onChange={onChangePassRep}
+          value={passRepeat}
+          onChange={onChangeField}
           placeholder='Пароль ещё раз'
         />
-        <button type='submit'>Отправить</button>
+        <button type='submit'>Зарегистрироваться</button>
       </form>
     </div>
   )
