@@ -1,123 +1,86 @@
-import { useStore } from './useStore'
+import * as yup from 'yup'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import styles from './App.module.css'
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 
-const initialState = {
-  email: '',
-  pass: '',
-  passRepeat: '',
-}
-const initialValidationState = {
-  ok: false,
-  valErrors: '',
-}
-const validateForm = ({ email, pass, passRepeat }) => {
-  const errors = []
-
-  console.log(email, pass, passRepeat)
-
-  const emptyFields = !(email && pass && passRepeat)
-  if (emptyFields) {
-    errors.push('Все поля формы должны быть заполнены!')
-  } else {
-    const emailRegex = /^\w+@[a-zA-Z]+\.[a-z]{2,}$/
-    const passRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/
-
-    if (email && !emailRegex.test(email)) {
-      errors.push('Адрес email некорректен!')
-    }
-
-    if (pass) {
-      if (passRepeat && pass !== passRepeat) {
-        errors.push('Пароли не совпадают!')
-      }
-
-      if (pass.length < 4) {
-        errors.push('Пароль короче 4-х символов')
-      }
-
-      if (!passRegex.test(pass)) {
-        errors.push(
-          'Пароль должен содержать строчные и прописные буквы, цифры и символы @$!%*?&',
-        )
-      }
-    }
-  }
-
-  return { valOk: !errors.length, valErrors: errors.join('\n') }
-}
+const fieldsSchema = yup.object({
+  email: yup.string().required('Email обязателен!').email('Некорректный email'),
+  pass: yup
+    .string()
+    .required('Пароль обязателен!')
+    .test(
+      'strong-password',
+      'Пароль должен содержать строчные и прописные буквы, цифры и символы @$!%*?&',
+      value => {
+        if (!value) return true
+        return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(value)
+      },
+    ),
+  passRepeat: yup
+    .string()
+    .required('Повтор пароля обязателен!')
+    .oneOf([yup.ref('pass')], 'Пароли не совпадают!'),
+})
 
 export const App = () => {
-  const { getState, updateState } = useStore(initialState)
-  const [valState, setValError] = useState(initialValidationState)
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(fieldsSchema),
+  })
 
-  const { email, pass, passRepeat } = getState()
+  const { email, pass, passRepeat } = errors
+
+  const filledValues = Object.values(watch()).filter(val => val)
+  const errMesssage = Object.values(errors)
+    .map(err => err?.message)
+    .join('\n')
+    .trim()
+  const isValid = !errMesssage && filledValues.length === 3
 
   const submitBtnRef = useRef(null)
 
-  const onChangeField = ({ target }) => {
-    updateState({ [target.name]: target.value })
-    const { valOk } = validateForm({
-      ...getState(),
-      [target.name]: target.value,
-    })
-    if (valOk) {
-      setValError(initialValidationState)
-      submitBtnRef.current.focus()
-    }
-  }
-  const onBlurField = ({ target }) => {
-    // const passfields = {
-    //   pass: getState().pass,
-    //   passRepeat: getState().passRepeat,
-    // }
-    setValError(
-      validateForm({
-        ...getState(),
-        [target.name]: target.value,
-      }),
-    )
-  }
+  if (isValid) submitBtnRef.current?.focus()
 
-  const onFormSubmit = e => {
-    e.preventDefault()
-    console.log('Send data:', getState())
+  const onFormSubmit = data => {
+    console.log('Send data:', data)
   }
 
   return (
     <div className={styles.app}>
-      <form onSubmit={onFormSubmit} noValidate>
-        {!valState.valOk && <p className={styles['error-label']}>{valState.valErrors}</p>}
+      <form onSubmit={handleSubmit(onFormSubmit)} noValidate>
+        {errMesssage && <p className={styles['error-label']}>{errMesssage}</p>}
         <input
           name='email'
           type='email'
-          value={email}
-          onChange={onChangeField}
-          onBlur={onBlurField}
           placeholder='Email'
+          aria-invalid={email ? 'true' : 'false'}
+          {...register('email')}
         />
         <input
           name='pass'
           type='password'
-          value={pass}
-          onChange={onChangeField}
-          onBlur={onBlurField}
           placeholder='Пароль'
+          aria-invalid={pass ? 'true' : 'false'}
+          {...register('pass')}
         />
         <input
           name='passRepeat'
           type='password'
-          value={passRepeat}
-          onChange={onChangeField}
-          onBlur={onBlurField}
           placeholder='Пароль ещё раз'
+          aria-invalid={passRepeat ? 'true' : 'false'}
+          {...register('passRepeat')}
         />
         <button
           ref={submitBtnRef}
           type='submit'
-          aria-disabled={!valState.valOk}
+          aria-disabled={true}
           // disabled={valError}
-          className={`${styles['btn-submit']}${!valState.valOk ? ' ' + styles.disabled : ''}`}
+          className={`${styles['btn-submit']}${!isValid ? ' ' + styles.disabled : ''}`}
         >
           Зарегистрироваться
         </button>
