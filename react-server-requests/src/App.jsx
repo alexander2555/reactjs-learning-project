@@ -1,27 +1,42 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useGetItems } from './hooks'
+import { Todo, Panel } from './components'
+
 import styles from './App.module.css'
 
 export const App = () => {
-  const [todos, setTodos] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+  const [sortInput, setSortInput] = useState(false)
 
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then(data => data.json())
-      .then(todos => {
-        setTodos(todos)
-      })
-  }, [])
+  const { todos, filteredTodos, setTodos, isLoading } = useGetItems(
+    searchInput,
+    sortInput,
+  )
 
   return (
     <div className={styles.app}>
       <h1>Todo list ({todos.length})</h1>
-      <ul className={styles.todos}>
-        {todos.map(({ id, title }) => (
-          <li key={id} data-id={id} className={styles['todo-item']}>
-            {title}
-          </li>
+      {/** Панель добавления, поиска и сортировки */}
+      <Panel
+        showLoader={isLoading}
+        panelState={{ searchInput, setSearchInput, sortInput, setSortInput }}
+        todosState={{ todos, setTodos }}
+        filteredTodos={filteredTodos}
+      />
+      {/** Список Todo */}
+      <ol className={styles.todos + (isLoading ? ' ' + styles.loading : '')}>
+        {filteredTodos.map(({ id, title }) => (
+          <Todo
+            key={id}
+            id={id}
+            title={title}
+            showLoader={isLoading}
+            setTodos={setTodos}
+          />
         ))}
-      </ul>
+      </ol>
+
+      {isLoading && <div className={styles.loader}></div>}
     </div>
   )
 }

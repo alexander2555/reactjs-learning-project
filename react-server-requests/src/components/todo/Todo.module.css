@@ -1,0 +1,23 @@
+.todo-item {
+  position: relative;
+  text-align-last: justify;
+}
+.todo-item-title {
+  display: inline-block;
+  line-height: 1;
+  border-radius: 4px;
+  padding: 2px;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
+  cursor: pointer;
+}
+.todo-item-title:hover {
+  color: black;
+  background-color: white;
+}
+.todo-item-input {
+  line-height: 1;
+  vertical-align: middle;
+  text-align-last: left;
+}
