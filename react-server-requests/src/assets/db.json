@@ -1,9 +1,19 @@
 {
   "products": [
     {
-      "id": "001",
-      "name": "test prod",
-      "price": 42
+      "name": "Новый элемент",
+      "price": 4242,
+      "id": "X5jjZtw"
+    },
+    {
+      "name": "Новый элемент",
+      "price": 4242,
+      "id": "JZNR3qo"
+    },
+    {
+      "name": "Новый элемент",
+      "price": 4242,
+      "id": "yj1NWrF"
     }
   ]
 }
