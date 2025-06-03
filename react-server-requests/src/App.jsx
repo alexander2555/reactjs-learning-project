@@ -1,29 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useGetItems, useAddItem, useUpdateItem, useDeleteItem } from './hooks'
+
 import styles from './App.module.css'
 
 export const App = () => {
-  const [products, setProducts] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [refresh, setRefresh] = useState(false)
 
-  useEffect(() => {
-    setIsLoading(true)
+  const { products, isLoading } = useGetItems(refresh)
+  const { addItem, isCreating } = useAddItem(refresh, setRefresh)
+  const { updateItem, isUpdating } = useUpdateItem(refresh, setRefresh)
+  const { deleteItem, isDeleting } = useDeleteItem(refresh, setRefresh)
 
-    fetch('http://localhost:3003/products/?id=001')
-      .then(data => data.json())
-      .then(p => {
-        setProducts(p)
-      })
-      .finally(() => setIsLoading(false))
-  }, [])
+  const showLoader = isCreating || isLoading || isUpdating || isDeleting
 
   return (
     <div className={styles.app}>
-      {isLoading && <div className={styles.loader}></div>}
+      {showLoader && <div className={styles.loader}></div>}
       {products.map(({ id, name, price }) => (
         <div key={id}>
           {name}: {price} р.
         </div>
       ))}
+      <button onClick={addItem} disabled={showLoader}>
+        Добавить элемент
+      </button>
+      <button onClick={updateItem} disabled={showLoader}>
+        Обновить элемент
+      </button>
+      <button onClick={deleteItem} disabled={showLoader}>
+        Удалить элемент
+      </button>
     </div>
   )
 }
