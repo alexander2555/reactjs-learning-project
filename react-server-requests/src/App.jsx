@@ -13,7 +13,7 @@ export const App = () => {
   return (
     <div className={styles.app}>
       {showLoader && <div className={styles.loader}></div>}
-      {items.map(({ id, name, price }) => (
+      {Object.entries(items).map(([id, { name, price }]) => (
         <div key={id}>
           {name}: {price} р.
         </div>

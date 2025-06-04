@@ -1,23 +1,21 @@
 import { useState } from 'react'
+import { ref, push } from 'firebase/database'
+import { db } from '../fb'
 
-export const useAddItem = setItems => {
+export const useAddItem = () => {
   const [isCreating, setIsCreating] = useState(false)
 
   const addItem = () => {
     setIsCreating(true)
 
-    fetch('http://localhost:3003/products', {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json;charset=utf-8' },
-      body: JSON.stringify({
-        name: 'Новый элемент',
-        price: 4242,
-      }),
+    const itemsDBRef = ref(db, 'items')
+
+    push(itemsDBRef, {
+      name: 'Новый элемент',
+      price: 4242,
     })
-      .then(rawResp => rawResp.json())
-      .then(newItem => {
-        console.log('добавлен новый элемент:', newItem)
-        setItems(items => [...items, newItem])
+      .then(resp => {
+        console.log('добавлен новый элемент:', resp)
       })
       .finally(() => setIsCreating(false))
   }
