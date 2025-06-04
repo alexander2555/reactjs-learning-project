@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react'
+import { ref, onValue } from 'firebase/database'
+import { db } from '../fb'
 
 export const useGetItems = () => {
   const [items, setItems] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    setIsLoading(true)
+    const itemsDBRef = ref(db, 'items')
 
-    fetch('http://localhost:3003/products')
-      .then(data => data.json())
-      .then(dataItems => {
-        setItems(dataItems)
-      })
-      .finally(() => setIsLoading(false))
+    return onValue(itemsDBRef, snapshot => {
+      const loadedItems = snapshot.val() || []
+
+      setItems(loadedItems)
+      setIsLoading(false)
+    })
   }, [])
 
-  return { items, setItems, isLoading }
+  return { items, isLoading }
 }
