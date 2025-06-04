@@ -1,26 +1,21 @@
 import { useState } from 'react'
+import { ref, set } from 'firebase/database'
+import { db } from '../fb'
 
-export const useUpdateItem = setItems => {
+export const useUpdateItem = () => {
   const [isUpdating, setIsUpdating] = useState(false)
 
   const updateItem = () => {
     setIsUpdating(true)
 
-    fetch('http://localhost:3003/products/001', {
-      method: 'PUT',
-      headers: { 'Content-type': 'application/json;charset=utf-8' },
-      body: JSON.stringify({
-        name: 'Новый измененный элемент',
-        price: 424242,
-      }),
+    const itemDBRef = ref(db, 'items/-ORv20mfk1QGP-px8OjW')
+
+    set(itemDBRef, {
+      name: 'Новый элемент',
+      price: 424242,
     })
-      .then(rawResp => rawResp.json())
-      .then(item => {
-        const itemId = item.id
-        if (itemId) {
-          setItems(items => items.map(i => (i.id === itemId ? item : i)))
-          console.log('изменен элемент:', item)
-        }
+      .then(resp => {
+        console.log('изменен элемент:', resp)
       })
       .finally(() => setIsUpdating(false))
   }
