@@ -2,18 +2,13 @@
   "products": [
     {
       "name": "Новый элемент",
-      "price": 4242,
-      "id": "X5jjZtw"
+      "price": 42,
+      "id": "002"
     },
     {
       "name": "Новый элемент",
       "price": 4242,
-      "id": "JZNR3qo"
-    },
-    {
-      "name": "Новый элемент",
-      "price": 4242,
-      "id": "yj1NWrF"
+      "id": "003"
     }
   ]
 }
