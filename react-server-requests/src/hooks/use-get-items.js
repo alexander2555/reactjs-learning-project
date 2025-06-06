@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-export const useGetItems = refresh => {
-  const [products, setProducts] = useState([])
+export const useGetItems = () => {
+  const [items, setItems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -9,11 +9,11 @@ export const useGetItems = refresh => {
 
     fetch('http://localhost:3003/products')
       .then(data => data.json())
-      .then(p => {
-        setProducts(p)
+      .then(dataItems => {
+        setItems(dataItems)
       })
       .finally(() => setIsLoading(false))
-  }, [refresh])
+  }, [])
 
-  return { products, isLoading }
+  return { items, setItems, isLoading }
 }

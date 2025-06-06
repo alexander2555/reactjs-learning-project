@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export const useAddItem = (refresh, setRefresh) => {
+export const useAddItem = setItems => {
   const [isCreating, setIsCreating] = useState(false)
 
   const addItem = () => {
@@ -15,9 +15,9 @@ export const useAddItem = (refresh, setRefresh) => {
       }),
     })
       .then(rawResp => rawResp.json())
-      .then(resp => {
-        console.log('добавлен новый элемент:', resp)
-        setRefresh(!refresh)
+      .then(newItem => {
+        console.log('добавлен новый элемент:', newItem)
+        setItems(items => [...items, newItem])
       })
       .finally(() => setIsCreating(false))
   }
