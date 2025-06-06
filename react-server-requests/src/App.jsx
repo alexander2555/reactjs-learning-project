@@ -1,22 +1,19 @@
-import { useState } from 'react'
 import { useGetItems, useAddItem, useUpdateItem, useDeleteItem } from './hooks'
 
 import styles from './App.module.css'
 
 export const App = () => {
-  const [refresh, setRefresh] = useState(false)
-
-  const { products, isLoading } = useGetItems(refresh)
-  const { addItem, isCreating } = useAddItem(refresh, setRefresh)
-  const { updateItem, isUpdating } = useUpdateItem(refresh, setRefresh)
-  const { deleteItem, isDeleting } = useDeleteItem(refresh, setRefresh)
+  const { items, setItems, isLoading } = useGetItems()
+  const { addItem, isCreating } = useAddItem(setItems)
+  const { updateItem, isUpdating } = useUpdateItem(setItems)
+  const { deleteItem, isDeleting } = useDeleteItem(setItems)
 
   const showLoader = isCreating || isLoading || isUpdating || isDeleting
 
   return (
     <div className={styles.app}>
       {showLoader && <div className={styles.loader}></div>}
-      {products.map(({ id, name, price }) => (
+      {items.map(({ id, name, price }) => (
         <div key={id}>
           {name}: {price} р.
         </div>

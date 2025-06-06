@@ -1,20 +1,22 @@
 import { useState } from 'react'
 
-export const useDeleteItem = (refresh, setRefresh) => {
+export const useDeleteItem = setItems => {
   const [isDeleting, setIsDeleting] = useState(false)
 
   const deleteItem = () => {
     setIsDeleting(true)
 
-    fetch('http://localhost:3003/products/001', {
+    const itemId = '001'
+    fetch(`http://localhost:3003/products/${itemId}`, {
       method: 'DELETE',
     })
       .then(rawResp => rawResp.json())
-      .then(resp => {
-        console.log('Удалён элемент:', resp)
-        setRefresh(!refresh)
+      .then(item => {
+        setItems(items => items.filter(i => i.id !== itemId))
+        console.log('Удалён элемент:', item)
       })
       .finally(() => setIsDeleting(false))
   }
+
   return { deleteItem, isDeleting }
 }
