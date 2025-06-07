@@ -2,23 +2,26 @@ import { useEffect, useState } from 'react'
 import styles from './App.module.css'
 
 export const App = () => {
-  const [products, setProducts] = useState([])
+  const [todos, setTodos] = useState([])
 
   useEffect(() => {
-    fetch('https://mocki.io/v1/399c66c5-e6e9-4c0c-96a6-28ed14af5d8a')
+    fetch('https://jsonplaceholder.typicode.com/todos')
       .then(data => data.json())
-      .then(p => {
-        setProducts(p)
+      .then(todos => {
+        setTodos(todos)
       })
   }, [])
 
   return (
     <div className={styles.app}>
-      {products.map(({ id, name, price }) => (
-        <div key={id}>
-          {name}: {price} р.
-        </div>
-      ))}
+      <h1>Todo list ({todos.length})</h1>
+      <ul className={styles.todos}>
+        {todos.map(({ id, title }) => (
+          <li key={id} data-id={id} className={styles['todo-item']}>
+            {title}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
