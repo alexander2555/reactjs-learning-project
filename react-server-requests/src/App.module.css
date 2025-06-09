@@ -12,7 +12,6 @@
   flex: 1 1 auto;
   width: max-content;
   max-width: calc(100vw - 3rem);
-  margin-bottom: 1rem;
   overflow-y: scroll;
 }
 .todo-item {
@@ -79,6 +78,10 @@
 
 .input-group {
   width: 250px;
+  text-align-last: justify;
+}
+.input-group:last-child {
+  margin-top: auto;
 }
 
 .loading {

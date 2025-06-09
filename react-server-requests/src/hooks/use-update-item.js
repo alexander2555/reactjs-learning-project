@@ -1,25 +1,20 @@
 import { useState } from 'react'
+import { ref, set } from 'firebase/database'
+import { db } from '../fb'
 
-export const useUpdateItem = setTodos => {
+export const useUpdateItem = () => {
   const [isUpdating, setIsUpdating] = useState(false)
 
   const updateItem = (todoId, todoTitle) => {
     setIsUpdating(true)
 
-    fetch('http://localhost:3003/todos/' + todoId, {
-      method: 'PUT',
-      headers: { 'Content-type': 'application/json;charset=utf-8' },
-      body: JSON.stringify({
-        id: todoId,
-        title: todoTitle,
-      }),
+    const itemDBRef = ref(db, 'items/' + todoId)
+
+    set(itemDBRef, {
+      title: todoTitle,
     })
-      .then(rawResp => rawResp.json())
-      .then(item => {
-        if (todoId) {
-          console.log('Обновление todo:', item)
-          setTodos(items => items.map(i => (i.id == todoId ? item : i)))
-        }
+      .then(() => {
+        console.log('Обновление todo:', todoId, todoTitle)
       })
       .finally(() => setIsUpdating(false))
   }

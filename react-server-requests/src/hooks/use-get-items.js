@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { ref, onValue } from 'firebase/database'
+import { db } from '../fb'
 import { debounce } from '../utils'
 
 const filterTodos = debounce((phrase, todosSet, setNewTodosSet) => {
@@ -9,25 +11,29 @@ const filterTodos = debounce((phrase, todosSet, setNewTodosSet) => {
 
 export const useGetItems = (searchInput, sortTodos) => {
   const [todos, setTodos] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [filteredTodos, setFilteredTodos] = useState([...todos])
+  const [isLoading, setIsLoading] = useState(true)
+  const [filteredTodos, setFilteredTodos] = useState(todos)
 
   useEffect(() => {
-    setIsLoading(true)
+    const itemsDBRef = ref(db, 'items')
 
-    fetch('http://localhost:3003/todos')
-      // fetch('https://jsonplaceholder.typicode.com/todos')
-      .then(data => data.json())
-      .then(todos => {
-        sortTodos ? todos.sort((t1, t2) => (t1.title < t2.title ? -1 : 0)) : todos
-        setTodos(todos)
+    return onValue(itemsDBRef, snapshot => {
+      const loadedTodos = Object.entries(snapshot.val() || {}).map(([id, { title }]) => {
+        return { id, title }
       })
-      .finally(() => setIsLoading(false))
+
+      setTodos(
+        sortTodos
+          ? loadedTodos.sort((t1, t2) => (t1.title < t2.title ? -1 : 0))
+          : loadedTodos,
+      )
+      setIsLoading(false)
+    })
   }, [sortTodos])
 
   useEffect(() => {
     filterTodos(searchInput, todos, setFilteredTodos)
   }, [searchInput, todos])
 
-  return { todos, filteredTodos, setTodos, isLoading }
+  return { todos, filteredTodos, isLoading }
 }
