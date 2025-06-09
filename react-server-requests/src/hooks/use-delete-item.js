@@ -1,18 +1,18 @@
 import { useState } from 'react'
+import { ref, remove } from 'firebase/database'
+import { db } from '../fb'
 
-export const useDeleteItem = setTodos => {
+export const useDeleteItem = () => {
   const [isDeleting, setIsDeleting] = useState(false)
 
   const deleteItem = todoId => {
     setIsDeleting(true)
 
-    fetch('http://localhost:3003/todos/' + todoId, {
-      method: 'DELETE',
-    })
-      .then(rawResp => rawResp.json())
-      .then(_ => {
-        setTodos(items => items.filter(i => i.id != todoId))
-        console.log('Удалено todo', todoId)
+    const itemDBRef = ref(db, 'items' + (todoId ? '/' + todoId : ''))
+
+    remove(itemDBRef)
+      .then(() => {
+        console.log('Удалено todo:', todoId ? todoId : 'все')
       })
       .finally(() => setIsDeleting(false))
   }

@@ -15,7 +15,6 @@ package-lock.json
 .env
 .vite
 .firebase
-src/fb.js
 
 # Editor directories and files
 .vscode/*
