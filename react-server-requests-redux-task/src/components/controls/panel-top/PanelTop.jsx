@@ -1,22 +1,24 @@
-import styles from './Panel.module.css'
+import styles from '../Controls.module.css'
 
-import { useState } from 'react'
-import { useAddItem } from '../../hooks'
-import { Button } from './button/Button'
+import { Button, InputGroup } from '../../'
 
-export const Panel = ({ showLoader, panelState, todosState, filteredTodos }) => {
-  const { todos, setTodos } = todosState
+export const PanelTop = ({
+  todos,
+  showLoader,
+  addItem,
+  filteredTodos,
+  panelTopState,
+}) => {
+  const { todoInput, setTodoInput, searchInput, setSearchInput, setSortInput } =
+    panelTopState
 
-  const [todoInput, setTodoInput] = useState('')
-  const { addItem, isCreating } = useAddItem(setTodos, setTodoInput)
-
-  const { searchInput, setSearchInput, setSortInput } = panelState
   return (
     <>
       {/** Добавление Todo */}
-      <div className={styles['input-group']}>
+      <InputGroup>
         <hr />
         <input
+          className={styles['todo-item-input']}
           type='text'
           value={todoInput}
           onChange={({ target }) => setTodoInput(target.value)}
@@ -26,17 +28,18 @@ export const Panel = ({ showLoader, panelState, todosState, filteredTodos }) => 
         &nbsp;
         <Button
           onClick={() => addItem(todoInput)}
-          disabled={showLoader || isCreating || !todoInput}
+          disabled={showLoader || !todoInput}
           title='Добавить todo'
         >
           +
         </Button>
-      </div>
+      </InputGroup>
       {/** Поиск (фильтр) Todo */}
       {todos.length > 1 && (
-        <div className={styles['input-group']}>
+        <InputGroup>
           <hr />
           <input
+            className={styles['todo-item-input']}
             type='text'
             value={searchInput}
             onChange={({ target }) => setSearchInput(target.value)}
@@ -44,11 +47,11 @@ export const Panel = ({ showLoader, panelState, todosState, filteredTodos }) => 
           />
           &nbsp;
           {searchInput && <span>({filteredTodos.length})</span>}
-        </div>
+        </InputGroup>
       )}
       {/** Сортировка Todo */}
       {todos.length > 1 && (
-        <div className={styles['input-group']}>
+        <InputGroup>
           <hr />
           <label htmlFor='sortBtn'>Сортировка</label>
           <input
@@ -56,9 +59,9 @@ export const Panel = ({ showLoader, panelState, todosState, filteredTodos }) => 
             type='checkbox'
             className={styles['todo-item-cb']}
             onClick={({ target }) => setSortInput(target.checked)}
-            disabled={showLoader || isCreating}
+            disabled={showLoader}
           />
-        </div>
+        </InputGroup>
       )}
     </>
   )
