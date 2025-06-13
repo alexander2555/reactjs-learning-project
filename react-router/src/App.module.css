@@ -9,29 +9,71 @@
 }
 
 .todos {
+  position: relative;
   flex: 1 1 auto;
   width: max-content;
   max-width: calc(100vw - 3rem);
   overflow-y: scroll;
 }
+.todos::after {
+  margin-top: -1rem;
+  display: block;
+  position: sticky;
+  content: '';
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1rem;
+  background-image: linear-gradient(to top, black 0%, transparent 100%);
+}
 .todo-item {
   position: relative;
-  text-align-last: justify;
+  margin-bottom: 1rem;
+}
+.todo-item:not(:last-of-type) {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid white;
+}
+.todo-item:only-of-type::after {
+  display: block;
+  position: absolute;
+  bottom: -2rem;
+  content: 'Клик на todo - редактировать';
+  font-size: 0.7rem;
+  font-style: italic;
+  color: green;
 }
 .todo-item-title {
   display: inline-block;
   line-height: 1;
+  border: 1px solid black;
   border-radius: 4px;
   padding: 2px;
-  transition:
-    color 0.3s,
-    background-color 0.3s;
+  transition: border-color 0.3s;
   cursor: pointer;
 }
 .todo-item-title:hover {
-  color: black;
-  background-color: white;
+  border-color: rgba(255, 255, 255, 0.5);
 }
+.todo-item-link {
+  display: inline-block;
+  width: 300px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+  color: white;
+}
+.todo-item-link > span {
+  text-decoration-color: white;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todo-item-link:hover {
+  text-decoration: none;
+}
+
 .todo-item-input {
   line-height: 1;
   vertical-align: middle;
@@ -82,6 +124,15 @@
 }
 .input-group:last-child {
   margin-top: auto;
+}
+
+.nav-link {
+  margin: 1rem;
+  text-decoration: none;
+  color: lightblue;
+}
+.nav-link:hover {
+  font-weight: bold;
 }
 
 .loading {

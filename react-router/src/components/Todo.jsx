@@ -1,14 +1,21 @@
 import { useEffect, useState, useRef } from 'react'
+import { useGetItem, useUpdateItem, useDeleteItem } from '../hooks'
+import { NavLink, useParams, useNavigate } from 'react-router-dom'
 
 import styles from '../App.module.css'
 
-const initialEdit = {
-  editing: null,
-  inputVal: '',
-}
+export const Todo = () => {
+  const { id } = useParams()
 
-export const Task = ({ id, title, updateItem }) => {
-  const [editInput, setEditInput] = useState(initialEdit)
+  const [editInput, setEditInput] = useState('')
+  const [isEditing, setIsEditing] = useState(false)
+  const { todo, setTodo, isLoading } = useGetItem(id)
+  const { updateItem, isUpdating } = useUpdateItem(setTodo)
+  const { deleteItem, isDeleting } = useDeleteItem(setTodo)
+  const navigate = useNavigate()
+
+  const showLoader = isLoading || isUpdating || isDeleting
+  const title = todo[0]?.title
 
   /** Реф на поле редактирования для автофокуса */
   const todoInputRef = useRef(null)
@@ -16,32 +23,34 @@ export const Task = ({ id, title, updateItem }) => {
   /** Обработка и валидация редактирования todo */
   const todoUpdate = ({ target, key }) => {
     if (typeof key === 'string' && key !== 'Enter') return
-    const todoEditInput = editInput.inputVal
-    if (typeof todoEditInput === 'string' && todoEditInput.trim()) {
-      const todoEl = target.closest('li')
-      const todoId = todoEl.dataset.id
-      if (todoEditInput !== todoEl.dataset.title) updateItem(todoId, todoEditInput)
+    if (typeof editInput === 'string' && editInput.trim()) {
+      if (editInput !== title) updateItem(id, editInput)
     }
-    setEditInput({ editing: null, inputVal: '' })
+    setEditInput('')
+    setIsEditing(false)
   }
 
   /** Автофокус на поле редактирования при нажатии на todo */
   useEffect(() => {
-    if (editInput.editing) todoInputRef?.current.focus()
-  }, [editInput.editing])
+    if (isEditing) {
+      setEditInput(title)
+      todoInputRef?.current.focus()
+    }
+  }, [isEditing])
 
   return (
     <>
-      {editInput.editing == id ? ( // группа ввода для редактирования todo
+      {showLoader && <div className={styles.loader}></div>}
+      <h1>Todo {id}</h1>
+      {isEditing ? ( // группа ввода для редактирования todo
         <div className={styles['input-group']}>
           <input
             ref={todoInputRef}
             type='text'
+            name='title'
             className={styles['todo-item-input']}
-            value={editInput.inputVal}
-            onChange={({ target }) =>
-              setEditInput({ editing: id, inputVal: target.value })
-            }
+            value={editInput}
+            onChange={({ target }) => setEditInput(target.value)}
             onKeyUp={todoUpdate} // для обработки нажатия Enter
           />
           &nbsp;
@@ -55,24 +64,30 @@ export const Task = ({ id, title, updateItem }) => {
         </div>
       ) : (
         // название todo и кнопка удаления
-        <>
+        <div className={styles['todo-item']}>
           <span
             className={styles['todo-item-title']}
             title='редактировать'
-            onClick={() => setEditInput({ editing: id, inputVal: title })}
+            onClick={() => setIsEditing(true)}
           >
             {title}
           </span>
           &nbsp;
           <button
             className={styles['todo-item-btn'] + ' ' + styles['todo-item-remove']}
-            onClick={() => deleteItem(id)}
+            onClick={() => {
+              deleteItem(id)
+              navigate('/', { replace: true })
+            }}
             title='удалить'
           >
             &times;
           </button>
-        </>
+        </div>
       )}
+      <NavLink to='/' className={styles['nav-link']}>
+        &larr;&nbsp;Todo List
+      </NavLink>
     </>
   )
 }

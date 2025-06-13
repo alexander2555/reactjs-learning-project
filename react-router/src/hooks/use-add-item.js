@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+const ANTIBLOCK_TIMEOUT = 42
+
 const putTodo = async todoTitle => {
   try {
     const response = await fetch('http://localhost:3003/todos', {
@@ -12,12 +14,11 @@ const putTodo = async todoTitle => {
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
-    await new Promise(res => setTimeout(res, 42)) // Задержка против блокировки db.json
+    await new Promise(res => setTimeout(res, ANTIBLOCK_TIMEOUT)) // Задержка против блокировки db.json
 
     return await response.json()
   } catch (err) {
     console.warn(err.message)
-    // throw err
   }
 }
 
@@ -38,15 +39,14 @@ export const useAddItem = (setTodos, setTodoInput) => {
           .then(async todos => {
             const todoItems = []
             for (const { id, title } of todos) {
-              await putTodo(title)
-              todoItems.push({ id, title })
+              todoItems.push(await putTodo(title))
               if (id >= 42) break
             }
             return todoItems
             //Promise.all(todoItems.map(({ title }) => pushTodo(title)))
           })
           .then(todoItems => {
-            setTodos(todoItems) // setTodos(items => [...items, ...todoItems])
+            setTodos(items => [...items, ...todoItems]) // setTodos(items => [...items, ...todoItems])
             console.log(`Добавлено ${todoItems.length} todo`)
           })
 
