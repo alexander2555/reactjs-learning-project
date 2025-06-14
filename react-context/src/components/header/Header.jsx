@@ -1,10 +1,10 @@
 import { CurrentUser } from './components'
 
-export const Header = ({ currentUser }) => {
+export const Header = () => {
   return (
     <div>
       <div>Информация в шапке приложения</div>
-      <CurrentUser currentUser={currentUser} />
+      <CurrentUser />
     </div>
   )
 }

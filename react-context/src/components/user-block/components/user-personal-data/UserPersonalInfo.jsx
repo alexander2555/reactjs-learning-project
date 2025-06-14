@@ -1,4 +1,9 @@
-export const UserPersonalInfo = ({ name, age }) => {
+import { useContext } from 'react'
+import { AppContext } from '../../../../context'
+
+export const UserPersonalInfo = () => {
+  const { name, age } = useContext(AppContext)
+
   return (
     <div>
       <h3>Персональные данные</h3>
