@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer } from 'react'
 import styles from './App.module.css'
 
 import { Header, UserBlock } from './components'
@@ -28,16 +28,10 @@ const reducer = (state, action) => {
 }
 
 export const App = () => {
-  const [userData, setUserData] = useState({})
-
-  const dispatch = action => {
-    const newState = reducer(userData, action)
-
-    setUserData(newState)
-  }
+  const [userData, dispatch] = useReducer(reducer, {})
 
   useEffect(() => {
-    setUserData(getUserFromServer())
+    dispatch({ type: 'SET_USER_DATA', payload: getUserFromServer() })
   }, [])
 
   return (
