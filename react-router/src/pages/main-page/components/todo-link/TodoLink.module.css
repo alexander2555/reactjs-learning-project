@@ -1,0 +1,20 @@
+@import '../../../../components/todo-item/TodoItem.module.css';
+
+.todo-item-link {
+  display: inline-block;
+  width: 300px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+  color: white;
+}
+.todo-item-link > span {
+  text-decoration-color: white;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todo-item-link:hover {
+  text-decoration: none;
+}

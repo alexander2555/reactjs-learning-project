@@ -1,0 +1,29 @@
+@import '../../components/todo-item/TodoItem.module.css';
+
+.todo-item-title {
+  display: inline-block;
+  line-height: 1;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 2px;
+  transition: border-color 0.3s;
+  cursor: pointer;
+}
+.todo-item-title:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.todo-item-input {
+  line-height: 1;
+  vertical-align: middle;
+  text-align-last: left;
+}
+
+.nav-link {
+  margin: 1rem;
+  text-decoration: none;
+  color: lightblue;
+}
+.nav-link:hover {
+  font-weight: bold;
+}
