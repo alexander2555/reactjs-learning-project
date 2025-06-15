@@ -1,0 +1,7 @@
+.input-group {
+  width: 250px;
+  text-align-last: justify;
+}
+.input-group:last-child {
+  margin-top: auto;
+}

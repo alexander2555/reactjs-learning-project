@@ -1,0 +1,38 @@
+.todo-item-btn {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  color: white;
+  background-color: black;
+  border: 1px solid white;
+  border-radius: 4px;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
+  cursor: pointer;
+}
+.todo-item-btn:hover {
+  color: white;
+  background-color: gray;
+}
+.todo-item-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.todo-item-update {
+  color: green;
+  border-color: green;
+}
+.todo-item-update:hover {
+  background-color: green;
+}
+.todo-item-remove {
+  margin-left: auto;
+  margin-right: 0.5rem;
+  color: red;
+  border-color: red;
+}
+.todo-item-remove:hover {
+  background-color: red;
+}

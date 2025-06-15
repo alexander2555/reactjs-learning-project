@@ -1,17 +1,22 @@
+import styles from './TodoPage.module.css'
+
 import { useEffect, useState, useRef } from 'react'
-import { useGetItem, useUpdateItem, useDeleteItem } from '../hooks'
+import { useGetItem, useUpdateItem, useDeleteItem } from '../../hooks'
 import { NavLink, useParams, useNavigate } from 'react-router-dom'
 
-import styles from '../App.module.css'
+import { Button, InputGroup, Loader } from '../../components'
 
 export const Todo = () => {
   const { id } = useParams()
 
+  /** Состояния для режима редактирования */
   const [editInput, setEditInput] = useState('')
   const [isEditing, setIsEditing] = useState(false)
+  /** Хуки CRUD для одного todo */
   const { todo, setTodo, isLoading } = useGetItem(id)
   const { updateItem, isUpdating } = useUpdateItem(setTodo)
   const { deleteItem, isDeleting } = useDeleteItem(setTodo)
+
   const navigate = useNavigate()
 
   const showLoader = isLoading || isUpdating || isDeleting
@@ -40,11 +45,11 @@ export const Todo = () => {
 
   return (
     <>
-      {showLoader && <div className={styles.loader}></div>}
+      {showLoader && <Loader />}
       <h1>Todo {id}</h1>
       {isEditing ? ( // группа ввода для редактирования todo
-        <div className={styles['input-group']}>
-          <input
+        <InputGroup>
+          <textarea
             ref={todoInputRef}
             type='text'
             name='title'
@@ -54,14 +59,10 @@ export const Todo = () => {
             onKeyUp={todoUpdate} // для обработки нажатия Enter
           />
           &nbsp;
-          <button
-            className={styles['todo-item-btn'] + ' ' + styles['todo-item-update']}
-            onClick={todoUpdate}
-            title='обновить'
-          >
+          <Button ownClass={'todo-item-update'} onClick={todoUpdate} title='обновить'>
             ok
-          </button>
-        </div>
+          </Button>
+        </InputGroup>
       ) : (
         // название todo и кнопка удаления
         <div className={styles['todo-item']}>
@@ -73,8 +74,8 @@ export const Todo = () => {
             {title}
           </span>
           &nbsp;
-          <button
-            className={styles['todo-item-btn'] + ' ' + styles['todo-item-remove']}
+          <Button
+            ownClass={'todo-item-remove'}
             onClick={() => {
               deleteItem(id)
               navigate('/', { replace: true })
@@ -82,7 +83,7 @@ export const Todo = () => {
             title='удалить'
           >
             &times;
-          </button>
+          </Button>
         </div>
       )}
       <NavLink to='/' className={styles['nav-link']}>

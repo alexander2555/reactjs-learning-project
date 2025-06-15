@@ -1,0 +1,17 @@
+.todo-item {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.todo-item:not(:last-of-type) {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid white;
+}
+.todo-item:only-of-type::after {
+  display: block;
+  position: absolute;
+  bottom: -2rem;
+  content: 'Клик на todo - редактировать';
+  font-size: 0.7rem;
+  font-style: italic;
+  color: green;
+}

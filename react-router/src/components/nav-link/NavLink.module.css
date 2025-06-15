@@ -1,0 +1,9 @@
+.nav-link {
+  margin: 1rem;
+  text-decoration: none;
+  color: lightblue;
+  text-align: center;
+}
+.nav-link:hover {
+  font-weight: bold;
+}
