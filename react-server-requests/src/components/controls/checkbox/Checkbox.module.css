@@ -1,0 +1,8 @@
+.input-checkbox {
+  aspect-ratio: 1;
+  width: 1rem;
+  vertical-align: middle;
+}
+.input-checkbox-label {
+  font-size: small;
+}

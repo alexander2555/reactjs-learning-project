@@ -1,20 +1,27 @@
-import styles from './Panel.module.css'
-
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { AppContext } from '../../context.js'
 import { useAddItem } from '../../hooks'
-import { Button } from './button/Button'
+import { Button, InputGroup } from './'
+import { Checkbox } from './checkbox/Checkbox.jsx'
 
-export const Panel = ({ showLoader, panelState, todosState, filteredTodos }) => {
-  const { todos, setTodos } = todosState
+export const Panel = () => {
+  const {
+    isLoading,
+    filteredTodos,
+    todos,
+    setTodos,
+    searchInput,
+    setSearchInput,
+    setSortInput,
+  } = useContext(AppContext)
 
   const [todoInput, setTodoInput] = useState('')
   const { addItem, isCreating } = useAddItem(setTodos, setTodoInput)
 
-  const { searchInput, setSearchInput, setSortInput } = panelState
   return (
     <>
       {/** Добавление Todo */}
-      <div className={styles['input-group']}>
+      <InputGroup>
         <hr />
         <input
           type='text'
@@ -26,15 +33,15 @@ export const Panel = ({ showLoader, panelState, todosState, filteredTodos }) => 
         &nbsp;
         <Button
           onClick={() => addItem(todoInput)}
-          disabled={showLoader || isCreating || !todoInput}
+          disabled={isLoading || isCreating || !todoInput}
           title='Добавить todo'
         >
           +
         </Button>
-      </div>
+      </InputGroup>
       {/** Поиск (фильтр) Todo */}
       {todos.length > 1 && (
-        <div className={styles['input-group']}>
+        <InputGroup>
           <hr />
           <input
             type='text'
@@ -44,21 +51,19 @@ export const Panel = ({ showLoader, panelState, todosState, filteredTodos }) => 
           />
           &nbsp;
           {searchInput && <span>({filteredTodos.length})</span>}
-        </div>
+        </InputGroup>
       )}
       {/** Сортировка Todo */}
       {todos.length > 1 && (
-        <div className={styles['input-group']}>
+        <InputGroup>
           <hr />
-          <label htmlFor='sortBtn'>Сортировка</label>
-          <input
-            id='sortBtn'
-            type='checkbox'
-            className={styles['todo-item-cb']}
+          <Checkbox
+            id={'sortBtn'}
+            label={'Сортировка'}
             onClick={({ target }) => setSortInput(target.checked)}
-            disabled={showLoader || isCreating}
+            disabled={isLoading || isCreating}
           />
-        </div>
+        </InputGroup>
       )}
     </>
   )
