@@ -1,7 +1,9 @@
-import PropTypes from 'prop-types'
 import styles from './Field.module.css'
+import { store } from '../reduxConfig'
 
-export const FieldLayout = ({ currentPlayer, isGameEnded, field, onCellClick }) => {
+export const FieldLayout = ({ onCellClick }) => {
+  const { isDraw, winner, currentPlayer, field } = store.getState()
+  const isGameEnded = isDraw || winner
   return (
     <div className={styles.field}>
       {field.map((row, i) =>
@@ -22,11 +24,4 @@ export const FieldLayout = ({ currentPlayer, isGameEnded, field, onCellClick }) 
       )}
     </div>
   )
-}
-
-FieldLayout.propTypes = {
-  isGameEnded: PropTypes.bool,
-  field: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  currentPlayer: PropTypes.string.isRequired,
-  onCellClick: PropTypes.func.isRequired,
 }

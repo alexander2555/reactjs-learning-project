@@ -1,7 +1,9 @@
-import PropTypes from 'prop-types'
 import styles from './Info.module.css'
+import { store } from '../reduxConfig'
 
-export const InfoLayout = ({ currentPlayer, winner, isDraw }) => {
+export const InfoLayout = () => {
+  const { currentPlayer, winner, isDraw } = store.getState()
+
   return (
     <div className={styles.info}>
       {winner && (
@@ -21,10 +23,4 @@ export const InfoLayout = ({ currentPlayer, winner, isDraw }) => {
       )}
     </div>
   )
-}
-
-InfoLayout.propTypes = {
-  isDraw: PropTypes.bool,
-  winner: PropTypes.string,
-  currentPlayer: PropTypes.string.isRequired,
 }
