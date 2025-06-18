@@ -1,23 +1,21 @@
-import PropTypes from 'prop-types'
 import styles from './App.module.css'
+import { store } from '../components/reduxConfig'
 
 import { Info } from './Info/Info'
 import { Field } from './Field/Field'
 
-export const AppLayout = ({ gameState, setGameState, restartGame }) => {
+const restartGame = () => {
+  store.dispatch({ type: 'game/init' })
+}
+
+export const AppLayout = () => {
   return (
     <div className={styles.app}>
-      <Info {...gameState} />
-      <Field {...gameState} setGameState={setGameState} />
+      <Info />
+      <Field />
       <button className={styles['restart-btn']} onClick={restartGame}>
         Начать заново
       </button>
     </div>
   )
-}
-
-AppLayout.propTypes = {
-  gameState: PropTypes.object,
-  setGameState: PropTypes.func,
-  restartGame: PropTypes.func,
 }
