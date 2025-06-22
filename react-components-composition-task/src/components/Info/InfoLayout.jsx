@@ -1,8 +1,10 @@
 import styles from './Info.module.css'
-import { store } from '../reduxConfig'
+import { useSelector } from 'react-redux'
 
 export const InfoLayout = () => {
-  const { currentPlayer, winner, isDraw } = store.getState()
+  const isDraw = useSelector(state => state.isDraw)
+  const winner = useSelector(state => state.winner)
+  const currentPlayer = useSelector(state => state.currentPlayer)
 
   return (
     <div className={styles.info}>

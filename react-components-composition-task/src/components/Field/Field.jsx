@@ -1,5 +1,6 @@
-import { FieldLayout } from './FieldLayout'
-import { store } from '../reduxConfig'
+import styles from './Field.module.css'
+import { useSelector, useDispatch } from 'react-redux'
+import { gameTurn } from '../../actions'
 
 const isFieldFull = field => field.every(r => r.every(c => c))
 const isRowWin = rows => rows.some(r => r.every(c => c.length && c === r[0]))
@@ -25,22 +26,47 @@ const isWin = rows => {
 }
 
 export const Field = () => {
-  const { winner, field, currentPlayer } = store.getState()
+  const field = useSelector(state => state.field)
+  const currentPlayer = useSelector(state => state.currentPlayer)
+  const winner = useSelector(state => state.winner)
+  const isDraw = useSelector(state => state.isDraw)
 
-  const cellClick = (i, j) => {
+  const isGameEnded = isDraw || winner
+
+  const dispatch = useDispatch()
+
+  const onCellClick = (i, j) => {
     field[i][j] = currentPlayer
     const haveWinner = isWin(field)
     const nextPlayer = !winner ? (currentPlayer === 'X' ? 'O' : 'X') : currentPlayer
-    store.dispatch({
-      type: 'game/turn',
-      payload: {
-        isDraw: isFieldFull(field) && !haveWinner,
-        winner: haveWinner ? currentPlayer : null,
-        currentPlayer: nextPlayer,
+    dispatch(
+      gameTurn(
+        isFieldFull(field) && !haveWinner,
+        haveWinner ? currentPlayer : null,
+        nextPlayer,
         field,
-      },
-    })
+      ),
+    )
   }
 
-  return <FieldLayout onCellClick={cellClick} />
+  return (
+    <div className={styles.field}>
+      {field.map((row, i) =>
+        row.map((cell, j) => (
+          <button
+            style={{
+              color: field[i][j] === 'X' ? 'red' : 'blue',
+              '--shadow-color': currentPlayer === 'X' ? 'red' : 'blue',
+            }}
+            className={styles.cell}
+            onClick={() => onCellClick(i, j)}
+            key={i * 10 + j}
+            disabled={field[i][j] || isGameEnded}
+          >
+            {cell}
+          </button>
+        )),
+      )}
+    </div>
+  )
 }

@@ -1,19 +1,21 @@
 import styles from './App.module.css'
-import { store } from '../components/reduxConfig'
+import { useDispatch } from 'react-redux'
 
-import { Info } from './Info/Info'
-import { Field } from './Field/Field'
-
-const restartGame = () => {
-  store.dispatch({ type: 'game/init' })
-}
+import { Info, Field } from './'
+import { GAME_RESET } from '../actions'
 
 export const AppLayout = () => {
+  const dispatch = useDispatch()
+
+  const onGameReset = () => {
+    dispatch(GAME_RESET)
+  }
+
   return (
     <div className={styles.app}>
       <Info />
       <Field />
-      <button className={styles['restart-btn']} onClick={restartGame}>
+      <button className={styles['restart-btn']} onClick={onGameReset}>
         Начать заново
       </button>
     </div>
