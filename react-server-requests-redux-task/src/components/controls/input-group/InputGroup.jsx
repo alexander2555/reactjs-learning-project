@@ -1,5 +1,5 @@
 import styles from '../Controls.module.css'
 
-export const InputGroup = ({ children }) => {
-  return <div className={styles['input-group']}>{children}</div>
+export const InputGroup = ({ children, ownClass }) => {
+  return <div className={styles['input-group'] + ' ' + ownClass}>{children}</div>
 }

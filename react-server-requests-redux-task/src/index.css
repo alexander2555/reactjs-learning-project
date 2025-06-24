@@ -18,10 +18,6 @@ ol {
   margin-bottom: 0;
 }
 
-input {
-  text-align-last: left;
-}
-
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;

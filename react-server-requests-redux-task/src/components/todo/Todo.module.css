@@ -16,8 +16,12 @@
   color: black;
   background-color: white;
 }
-.todo-item-input {
+.todo-item .input-group {
+  width: 100%;
+}
+.todo-item .input {
   line-height: 1;
   vertical-align: middle;
   text-align-last: left;
+  width: 80%;
 }

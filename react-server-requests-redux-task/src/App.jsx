@@ -1,51 +1,54 @@
-import { useState } from 'react'
-import { useGetItems, useAddItem, useDeleteItem } from './hooks'
-import { Todo, PanelTop, PanelBottom } from './components'
-
 import styles from './App.module.css'
 
-export const App = () => {
-  const [todoInput, setTodoInput] = useState('')
-  const [searchInput, setSearchInput] = useState('')
-  const [sortInput, setSortInput] = useState(false)
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { showLoaderSel } from './selectors'
+import { Todo, PanelTop, PanelBottom } from './components'
+import { updateTodosFromServer } from './actions'
 
-  const { todos, filteredTodos, setTodos, isLoading } = useGetItems(
-    searchInput,
-    sortInput,
-  )
-  const { addItem, isCreating } = useAddItem(setTodoInput)
-  const { deleteItem, isDeleting } = useDeleteItem()
+Array.prototype.filterTodos = function (phrase) {
+  return typeof phrase === 'string' && phrase.trim()
+    ? [...this].filter(t => t.title.includes(phrase))
+    : this
+}
+
+Array.prototype.sortTodos = function (isSort) {
+  return isSort && this.length > 1
+    ? [...this].sort((t1, t2) => (t1.title < t2.title ? -1 : 0))
+    : this
+}
+
+export const App = () => {
+  const dispatch = useDispatch()
+
+  const todos = useSelector(state => state.todosState.todos)
+  const showLoader = useSelector(showLoaderSel)
+
+  useEffect(() => {
+    dispatch(updateTodosFromServer)
+  }, [])
+
+  const sortTodos = useSelector(state => state.viewState.sort)
+  const searchTodos = useSelector(state => state.viewState.search)
+
+  const filteredTodos = todos.filterTodos(searchTodos)
 
   return (
     <div className={styles.app}>
       <h1>Todo list ({todos.length})</h1>
+
       {/** Панель добавления, поиска и сортировки */}
-      <PanelTop
-        todos={todos}
-        showLoader={isLoading}
-        panelTopState={{
-          todoInput,
-          setTodoInput,
-          searchInput,
-          setSearchInput,
-          setSortInput,
-        }}
-        addItem={addItem}
-        filteredTodos={filteredTodos}
-      />
+      <PanelTop filteredTodos={filteredTodos} />
+
       {/** Список Todo */}
       {todos.length ? ( // если есть, что выводить
-        <ol className={styles.todos + (isLoading ? ' ' + styles.loading : '')}>
+        <ol className={styles.todos + (showLoader ? ' ' + styles.loading : '')}>
           {filteredTodos.length ? ( // если есть, что выводить при поиске
-            filteredTodos.map(({ id, title }) => (
-              <Todo
-                key={id}
-                id={id}
-                title={title}
-                showLoader={isLoading}
-                setTodos={setTodos}
-              />
-            ))
+            filteredTodos
+              .sortTodos(sortTodos)
+              .map(({ id, title }) => (
+                <Todo key={id} id={id} title={title} showLoader={showLoader} />
+              ))
           ) : (
             // если нечего выводить при поиске
             <p>Ничего не найдено</p>
@@ -59,14 +62,11 @@ export const App = () => {
           Добавь новое todo
         </p>
       )}
+
       {/** Дополнительные кнопки для работы со всем списком */}
-      <PanelBottom
-        showLoader={isLoading}
-        addItem={addItem}
-        deleteItem={deleteItem}
-        setSearchInput={setSearchInput}
-      />
-      {isLoading && <div className={styles.loader}></div>}
+      <PanelBottom />
+
+      {showLoader && <div className={styles.loader}></div>}
     </div>
   )
 }

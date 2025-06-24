@@ -9,10 +9,22 @@
 }
 
 .todos {
+  position: relative;
   flex: 1 1 auto;
   width: max-content;
   max-width: calc(100vw - 3rem);
   overflow-y: scroll;
+}
+.todos::after {
+  margin-top: -1rem;
+  display: block;
+  position: sticky;
+  content: '';
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1rem;
+  background-image: linear-gradient(to top, black 0%, transparent 100%);
 }
 
 .loading {

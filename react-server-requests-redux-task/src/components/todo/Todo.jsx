@@ -1,76 +1,93 @@
-import { useRef, useEffect, useState } from 'react'
-import { useUpdateItem, useDeleteItem } from '../../hooks'
-import { Button } from '../controls/button/Button'
-
 import styles from './Todo.module.css'
 
-const initialEdit = {
-  editing: null,
-  inputVal: '',
-}
+import { useSelector, useDispatch } from 'react-redux'
+import { useRef, useEffect } from 'react'
+import { editTodoIndexSel, editTodoInputSel, showLoaderSel } from '../../selectors'
+import {
+  editTodoIndex,
+  editTodoInputChange,
+  removeTodoFromServer,
+  updateTodoToServer,
+} from '../../actions'
 
-export const Todo = ({ id, title, showLoader, setTodos }) => {
-  const [editInput, setEditInput] = useState(initialEdit)
+import { Button, InputGroup } from '../'
+
+export const Todo = ({ id, title }) => {
+  const dispatch = useDispatch()
+
+  const editIndex = useSelector(editTodoIndexSel)
+  const editInput = useSelector(editTodoInputSel)
+  const showLoader = useSelector(showLoaderSel)
 
   const todoInputRef = useRef(null)
 
-  const { updateItem, isUpdating } = useUpdateItem(setTodos)
-  const { deleteItem, isDeleting } = useDeleteItem(setTodos)
-
-  const todoUpdate = ({ target, key }) => {
-    if (typeof key === 'string' && key !== 'Enter') return
-    const todoEditInput = editInput.inputVal
-    if (typeof todoEditInput === 'string' && todoEditInput.trim()) {
-      const todoEl = target.closest('li')
-      const todoId = todoEl.dataset.id
-      if (todoEditInput !== todoEl.dataset.title) updateItem(todoId, todoEditInput)
-    }
-    setEditInput({ editing: null, inputVal: '' })
+  const startEditing = () => {
+    /** EDIT_TODO_INDEX */
+    dispatch(editTodoIndex(id))
+    /** EDIT_TODO_INPUT_CHANGE */
+    dispatch(editTodoInputChange(title))
   }
 
+  /** Автофокус при редактировании */
   useEffect(() => {
-    if (editInput.editing) todoInputRef?.current.focus()
-  }, [editInput.editing])
+    if (editIndex === id) todoInputRef?.current.focus()
+  }, [editIndex])
+
+  const updateItem = () => {
+    if (typeof editInput === 'string' && editInput.trim()) {
+      if (editInput !== title) {
+        /** CHANGE_TODO */
+        dispatch(updateTodoToServer(id, editInput))
+      }
+    }
+    /** EDIT_TODO_INDEX */
+    dispatch(editTodoIndex(null))
+    /** EDIT_TODO_INPUT_CHANGE */
+    dispatch(editTodoInputChange(''))
+  }
 
   return (
     <li data-id={id} data-title={title} className={styles['todo-item']}>
-      {editInput.editing == id ? ( // группа ввода для редактирования todo
-        <div className={styles['input-group']}>
-          <input
+      {editIndex === id ? ( // группа ввода для редактирования todo
+        <InputGroup ownClass={styles['input-group']}>
+          <textarea
             ref={todoInputRef}
-            type='text'
-            className={styles['todo-item-input']}
-            value={editInput.inputVal}
-            onChange={({ target }) =>
-              setEditInput({ editing: id, inputVal: target.value })
-            }
-            onKeyUp={todoUpdate}
+            className={styles['input']}
+            value={editInput}
+            onChange={({ target }) => {
+              dispatch(editTodoInputChange(target.value))
+            }} /** EDIT_TODO_INPUT_CHANGE */
+            onKeyDown={e => (e.key === 'Enter' ? e.preventDefault() : false)}
+            onKeyUp={({ key }) => (key === 'Enter' ? updateItem() : false)}
           />
           &nbsp;
           <Button
             ownClass='todo-item-update'
-            onClick={todoUpdate}
-            disabled={showLoader || isUpdating || isDeleting}
+            onClick={updateItem}
+            disabled={showLoader}
             title='обновить'
           >
             ok
           </Button>
-        </div>
+        </InputGroup>
       ) : (
         // название todo и кнопка удаления
         <>
           <span
             className={styles['todo-item-title']}
             title='редактировать'
-            onClick={() => setEditInput({ editing: id, inputVal: title })}
+            onClick={startEditing}
           >
             {title}
           </span>
           &nbsp;
           <Button
             ownClass='todo-item-remove'
-            onClick={() => deleteItem(id)}
-            disabled={showLoader || isUpdating || isDeleting}
+            onClick={() => {
+              /** REMOVE_TODO */
+              dispatch(removeTodoFromServer(id))
+            }}
+            disabled={showLoader}
             title='удалить'
           >
             &times;

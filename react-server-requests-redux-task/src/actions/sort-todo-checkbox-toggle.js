@@ -1,0 +1,3 @@
+export const SORT_TODO_CHECKBOX_TOGGLE = {
+  type: 'SORT_TODO_CHECKBOX_TOGGLE',
+}

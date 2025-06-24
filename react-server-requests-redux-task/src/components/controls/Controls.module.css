@@ -1,7 +1,13 @@
 .input-group {
-  width: 250px;
+  width: 300px;
+  max-width: 100%;
   text-align-last: justify;
 }
 .input-group:last-child {
   margin-top: auto;
+}
+
+.input {
+  width: 80%;
+  text-align-last: left;
 }
