@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { useUpdateItem, useDeleteItem } from '../../hooks'
-import { Button } from '../controls/button/Button'
+import { Button, InputGroup } from '../controls'
 
 import styles from './Todo.module.css'
 
@@ -35,7 +35,7 @@ export const Todo = ({ id, title, showLoader, setTodos }) => {
   return (
     <li data-id={id} data-title={title} className={styles['todo-item']}>
       {editInput.editing == id ? ( // группа ввода для редактирования todo
-        <div className={styles['input-group']}>
+        <InputGroup>
           <input
             ref={todoInputRef}
             type='text'
@@ -55,7 +55,7 @@ export const Todo = ({ id, title, showLoader, setTodos }) => {
           >
             ok
           </Button>
-        </div>
+        </InputGroup>
       ) : (
         // название todo и кнопка удаления
         <>
